@@ -1,0 +1,6 @@
+framework module Pods_YoutubeApplicationUITests {
+  umbrella header "Pods-YoutubeApplicationUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

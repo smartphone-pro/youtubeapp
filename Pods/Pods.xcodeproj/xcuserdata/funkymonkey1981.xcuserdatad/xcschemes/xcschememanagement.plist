@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>Pods-YoutubeApplication.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-YoutubeApplicationTests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-YoutubeApplicationUITests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>iOS-GTLYouTube.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>youtube-ios-player-helper.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>2D5FCDF56394FA06EB8F6F4C47C11513</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>68952D1F245218AE9112B0E4E646E13F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B71A28C720D784DB6D6AEC6AFBB44E34</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F035D1F957D1B0450AF4D4AE343FA3EF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FF26A94607B87F0EC1BE3E87DF6F146D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>
