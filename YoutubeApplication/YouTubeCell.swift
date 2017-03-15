@@ -16,8 +16,9 @@ class YouTubeCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         var playerVars = ["playsinline" : 1]
-        self.youTubePlayer.load(withPlaylistId: "PaKjRMMU9HI", playerVars: playerVars)
-        
+        //nNF1apItt94&list=PLSzJYwbMiMOHhnCcKck95lAm1EecMRwT9&index=1&t=4s
+//        self.youTubePlayer.load(withPlaylistId: "PLSzJYwbMiMOHhnCcKck95lAm1EecMRwT9", playerVars: playerVars)
+//        self.youTubePlayer.load(withVideoId: "nNF1apItt94")
         // Initialization code
     }
 

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ssz-ps-VKb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="cBa-HC-nbf">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--You Tube Table View Controller-->
+        <!--Photography-->
         <scene sceneID="6Lg-h6-CYz">
             <objects>
                 <tableViewController id="ssz-ps-VKb" customClass="YouTubeTableViewController" customModule="YoutubeApplication" customModuleProvider="target" sceneMemberID="viewController">
@@ -22,7 +21,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oTK-w9-SsD" id="EGC-ZJ-THb">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -32,10 +31,58 @@
                             <outlet property="delegate" destination="ssz-ps-VKb" id="Fov-tC-tSe"/>
                         </connections>
                     </tableView>
+                    <tabBarItem key="tabBarItem" title="Photography" id="ITe-tq-7o5"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Eri-bP-t3l" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="169" y="143"/>
+            <point key="canvasLocation" x="1108" y="142.57871064467767"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="D4A-xn-RYY">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="cBa-HC-nbf" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="jXu-Aa-bvZ">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="96s-Xi-yQb" kind="relationship" relationship="viewControllers" id="LeY-4S-u6u"/>
+                        <segue destination="ssz-ps-VKb" kind="relationship" relationship="viewControllers" id="HRJ-p4-wIt"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kKE-nW-8ZQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="168.80000000000001" y="142.57871064467767"/>
+        </scene>
+        <!--Workout Videos-->
+        <scene sceneID="WKF-BP-QNt">
+            <objects>
+                <tableViewController id="96s-Xi-yQb" customClass="YouTubeTableViewController" customModule="YoutubeApplication" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="cYc-Cc-Gj0">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="HYo-Fq-EKw">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HYo-Fq-EKw" id="7JN-Jd-dTx">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="96s-Xi-yQb" id="wFz-lQ-EZa"/>
+                            <outlet property="delegate" destination="96s-Xi-yQb" id="gCa-zg-ntP"/>
+                        </connections>
+                    </tableView>
+                    <tabBarItem key="tabBarItem" title="Workout Videos" id="LIi-1g-eZu"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oRi-PL-bOH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="169" y="958"/>
         </scene>
     </scenes>
 </document>

@@ -12,118 +12,115 @@ import iOS_GTLYouTube
 
 class YouTubeTableViewController: UITableViewController, YTPlayerViewDelegate {
 
+    var apiKey = "" //place your api key here
     
+    //PLVirhGJQqidpY7n9PJ57FwaW1iogJsFZH = Photographer
+    //PLVirhGJQqidqjbXhirvXnLZ5aLzpHc0lX = workout
+    var playListArray = ["PLVirhGJQqidpY7n9PJ57FwaW1iogJsFZH","PLVirhGJQqidqjbXhirvXnLZ5aLzpHc0lX"]
+    
+    //Array of vidoes in your channel
+    var videosArray: Array<Dictionary<NSObject, AnyObject>> = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let youTubeCell = UINib(nibName: "YouTubeCell", bundle: nil)
-        self.tableView.register(youTubeCell, forCellReuseIdentifier: "YouTubeCell")
-        
-        TAAYouTubeWrapper.videos(forPlaylist: "PLVirhGJQqidqjbXhirvXnLZ5aLzpHc0lX", forUser: "BenSmith") { (success, videos, error) in
-            print(videos)
-        }
-        TAAYouTubeWrapper.videos(forChannel: "KatyPerryMusic") { (success, movies, error) in
-            print(movies)
-        }
+        self.tableView.registerNib(youTubeCell, forCellReuseIdentifier: "YouTubeCell")
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        self.videosArray = []
+        getVideosForPlayList(playListArray[(self.tabBarController?.selectedIndex)!])
+        print("Selected index \(self.tabBarController?.selectedIndex)")
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func getVideosForPlayList(playListID: String) {
+        // Get the selected channel's playlistID value from the channelsDataArray array and use it for fetching the proper video playlst.
+        let playlistID = playListID
+        
+        // Form the request URL string.
+        let urlString = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=\(playlistID)&key=\(apiKey)"
+        
+        // Create a NSURL object based on the above string.
+        let targetURL = NSURL(string: urlString)
+        
+        // Fetch the playlist from Google.
+        performGetRequest(targetURL, completion: { (data, HTTPStatusCode, error) -> Void in
+            if HTTPStatusCode == 200 && error == nil {
+                do {
+                    // Convert the JSON data into a dictionary.
+                    let resultsDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as! Dictionary<NSObject, AnyObject>
+                    
+                    // Get all playlist items ("items" array).
+                    let items: Array<Dictionary<NSObject, AnyObject>> = resultsDict["items"] as! Array<Dictionary<NSObject, AnyObject>>
+                    
+                    // Use a loop to go through all video items.
+                    for var i=0; i<items.count; ++i {
+                        let playlistSnippetDict = (items[i] as Dictionary<NSObject, AnyObject>)["snippet"] as! Dictionary<NSObject, AnyObject>
+                        
+                        // Initialize a new dictionary and store the data of interest.
+                        var desiredPlaylistItemDataDict = Dictionary<NSObject, AnyObject>()
+                        
+                        desiredPlaylistItemDataDict["title"] = playlistSnippetDict["title"]
+                        desiredPlaylistItemDataDict["thumbnail"] = ((playlistSnippetDict["thumbnails"] as! Dictionary<NSObject, AnyObject>)["default"] as! Dictionary<NSObject, AnyObject>)["url"]
+                        desiredPlaylistItemDataDict["videoID"] = (playlistSnippetDict["resourceId"] as! Dictionary<NSObject, AnyObject>)["videoId"]
+                        
+                        // Append the desiredPlaylistItemDataDict dictionary to the videos array.
+                        self.videosArray.append(desiredPlaylistItemDataDict)
+                        
+                        // Reload the tableview.
+                    }
+                    self.tableView.reloadData()
+
+                } catch {
+                    print(error)
+                }
+            }
+            else {
+                print("HTTP Status Code = \(HTTPStatusCode)")
+                print("Error while loading channel videos: \(error)")
+            }
+            
+        })
+    }
+    
+    // MARK: Custom method implementation
+    func performGetRequest(targetURL: NSURL!, completion: (data: NSData?, HTTPStatusCode: Int, error: NSError?) -> Void) {
+        let request = NSMutableURLRequest(URL: targetURL)
+        request.HTTPMethod = "GET"
+        
+        let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        
+        let session = NSURLSession(configuration: sessionConfiguration)
+        
+        let task = session.dataTaskWithRequest(request, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                completion(data: data, HTTPStatusCode: (response as! NSHTTPURLResponse).statusCode, error: error)
+            })
+        })
+        
+        task.resume()
     }
 
     // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return videosArray.count
     }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 1
-    }
-
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "YouTubeCell", for: indexPath) as! YouTubeCell
-
-        cell.youTubePlayer.delegate = self
-
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("YouTubeCell", forIndexPath: indexPath) as! YouTubeCell
+        
+        cell.youTubePlayer.delegate = self //set delegate of the cells youtubeplayer to this class
+        
+        let video = videosArray[indexPath.row]
+        let videoID = video["videoID"] as! String
+        cell.youTubePlayer.loadWithVideoId(videoID)
+        
         return cell
     }
- 
 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 140
     }
-    
-    func playerView(_ playerView: YTPlayerView, didChangeTo state: YTPlayerState) {
-        switch state {
-        case .unstarted:
-            print("UNstarted")
-        case .playing:
-            print("Playing")
-
-        case .unknown:
-            print("Unknown")
-
-        case .queued:
-            print("Queued")
-
-        case .paused:
-            print("Paused")
-
-        case .ended:
-            print("Ended")
-            
-        case .buffering:
-            print("Buffering")
-        }
-    }
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
